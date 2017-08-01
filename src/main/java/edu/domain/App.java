@@ -85,7 +85,7 @@ public class App {
 				System.out.println("Enter 'L' to see the List information about projects and their beneficiaries \n"
 						+ "Enter 'T' to see List tasks for a project \n"
 						+ "Enter 'SS' to see List projects by status \n"
-						+ "Enter 'R'to see Look for projects that requires a particular type of resource \n"
+						+ "Enter 'R'to see for projects that requires a particular type of resource \n"
 						+ "Enter 'S' to see Search projects by keywords and location \n"
 						+ "Enter 'v' to see List projects and tasks where a volunteer have offered services, ordered by date of the task");
 
@@ -107,7 +107,7 @@ public class App {
 					projByResource();					
 					
 				case "S":
-					projByLocation();					
+					projByLocationAndKeyword();					
 					
 				case "V":
 					listProjInfo();
@@ -146,6 +146,7 @@ public class App {
 			timeFrame_proj.setEndDates(proj_end_date);
 			Project proj1 = new Project("NY", timeFrame_proj,"Attendance System");
 			Project proj2 = new Project("DC", timeFrame_proj, "Fire Control system");
+			Project proj3 = new Project("DC", timeFrame_proj, "Attendance System");
 
 			beneficiary1.setName("MUM");
 			beneficiary1.setProject(proj1);
@@ -157,10 +158,12 @@ public class App {
 			Task task1 = new Task("ToDo", timeFrame_proj, proj1);
 			Task task2 = new Task("In_Progress", timeFrame_proj, proj1);
 			Task task3 = new Task("In_Progress", timeFrame_proj, proj2);
+			Task task4 = new Task("Done", timeFrame_proj, proj3);
 
 			Resource resource1 = new Resource("devloper", "exsiting project", task1);
 			Resource resource2 = new Resource("driver", "exsiting project", task2);
 			Resource resource3 = new Resource("devloper", "exsiting project", task3);
+			Resource resource4 = new Resource("devloper", "exsiting project", task4);
 
 			em = emf.createEntityManager();
 			tx = em.getTransaction();
@@ -169,6 +172,7 @@ public class App {
 			em.persist(resource1);
 			em.persist(resource2);
 			em.persist(resource3);
+			em.persist(resource4);
 			em.persist(beneficiary1);
 			em.persist(beneficiary2);
 			em.persist(beneficiary3);
@@ -281,7 +285,7 @@ public class App {
 	private static void projByStatus() {
 		EntityManager em = null;
 		EntityTransaction tx = null;
-		System.out.println("Enter status Keyword like 'ToDo' 'In_Progress'");
+		System.out.println("Enter status Keyword like 'ToDo' 'In_Progress' or 'Done'");
 		Scanner input = new Scanner(System.in);
 		String status = input.nextLine();
 
@@ -326,7 +330,7 @@ public class App {
 	private static void projByResource() {
 		EntityManager em = null;
 		EntityTransaction tx = null;
-		System.out.println("Enter Skill Keyword like 'devloper' and 'driver' ");
+		System.out.println("Enter Skill Keyword like 'devloper' or 'driver' ");
 		Scanner input = new Scanner(System.in);
 		String skill = input.nextLine();
 
@@ -368,12 +372,14 @@ public class App {
 	}
 
 	/**shows the list projects by loaction*/
-	private static void projByLocation() {
+	private static void projByLocationAndKeyword() {
 		EntityManager em = null;
 		EntityTransaction tx = null;
-		System.out.println("Enter Location Keyword like 'dc'");
 		Scanner input = new Scanner(System.in);
+		System.out.println("Enter Location Keyword like 'DC' or 'NY'");		
 		String location = input.nextLine();
+		System.out.println("Enter project descrption Keyword like 'Control' or 'System'");
+		String keyword = input.nextLine();
 
 		try {
 			em = emf.createEntityManager();
@@ -384,13 +390,20 @@ public class App {
 			 Query query = em.createQuery("Select proj From Project proj Where proj.location = :location");
 			 query.setParameter("location", location);
 			 List<Project> projects = query.getResultList();
-			for (Project proj: projects) {				
-					logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:",
-							"start_date:", "end_date"));
-					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getTimeframe().getStartDate(),
-							proj.getLocation(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
+			 logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:","Project_descrption:"
+						,"start_date:", "end_date"));
+			for (Project proj: projects) {
+				    String[] temp = proj.getDescription().split("\\s+");
+				    
+				    for(int i=0; i<temp.length; i++){
+				    	
+				    if(keyword.equalsIgnoreCase(temp[i])){
+					
+					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getId(),
+							proj.getLocation(),proj.getDescription(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
 					}
-			
+				    }
+			}
 			tx.commit();
 
 			emf.close();

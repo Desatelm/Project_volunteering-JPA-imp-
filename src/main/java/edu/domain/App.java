@@ -54,6 +54,7 @@ public class App {
 				tx = em.getTransaction();
 				tx.begin();
 				Volunteer volunteer = new Volunteer();
+				
 				System.out.println("Enter your Name");
 				volunteer.setName(input.nextLine());
 				System.out.println("Enter your Skill");
@@ -143,14 +144,14 @@ public class App {
 
 			timeFrame_proj.setStartDate(proj_str_date);
 			timeFrame_proj.setEndDates(proj_end_date);
-			Project proj1 = new Project("addis", timeFrame_proj);
-			Project proj2 = new Project("DC", timeFrame_proj);
+			Project proj1 = new Project("NY", timeFrame_proj,"Attendance System");
+			Project proj2 = new Project("DC", timeFrame_proj, "Fire Control system");
 
-			beneficiary1.setName("Esays");
+			beneficiary1.setName("MUM");
 			beneficiary1.setProject(proj1);
-			beneficiary2.setName("joe");
+			beneficiary2.setName("HAU");
 			beneficiary2.setProject(proj1);
-			beneficiary3.setName("bob");
+			beneficiary3.setName("IA State");
 			beneficiary3.setProject(proj2);
 
 			Task task1 = new Task("ToDo", timeFrame_proj, proj1);
@@ -205,15 +206,15 @@ public class App {
 						"Select DISTINCT ben from Beneficiary ben join Fetch ben.project bPro where bPro.id = :id ");
 				query.setParameter("id", proj.getId());
 				List<Beneficiary> bens = query.getResultList();
-				logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:", "start_date:",
+				logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", "Project_ID:", "Project_location:","Project_descrpttion:", "start_date:",
 						"end_date"));
 
-				logger.trace(String.format("%-18s  %-18s %18s %31s", proj.getTimeframe().getStartDate(),
-						proj.getLocation(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
+				logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getId(),
+						proj.getLocation(), proj.getDescription(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
 
 				logger.trace(String.format("%-18s%-31s", "Beneficiary_Id:", "Beneficiary_Name"));
 				for (Beneficiary ben : bens) {
-					logger.trace(String.format("%-18s%-18s", ben.getName(), ben.getName()));
+					logger.trace(String.format("%-18s%-18s", ben.getBeneficiaryId(), ben.getName()));
 				}
 			}
 			tx.commit();
@@ -247,15 +248,14 @@ public class App {
 
 			for (Project proj : projs) {
 
-				Query query = em
-						.createQuery("Select task From Task task join Fetch task.project tsk where tsk.id =:id");
+				Query query = em.createQuery("Select task From Task task join Fetch task.project tsk where tsk.id =:id");
 				query.setParameter("id", proj.getId());
 				List<Task> tasks = query.getResultList();
 
-				logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:", "start_date:",
-						"end_date"));
-				logger.trace(String.format("%-18s  %-18s %18s %31s", proj.getTimeframe().getStartDate(),
-						proj.getLocation(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
+				logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", "Project_ID:", "Project_location:","Project_Descrpition:",
+						"start_date:", "end_date"));
+				logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getId(),
+						proj.getLocation(), proj.getDescription(),proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
 
 				logger.trace(String.format("%-18s%-31s", "Task_Id:", "Task_Status"));
 				for (Task task : tasks) {
@@ -299,10 +299,10 @@ public class App {
 				List<Project> projs = query.getResultList();
 
 				for (Project proj : projs) {
-					logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:",
+					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", "Project_ID:", "Project_location:", "Project_Descrpition:",
 							"start_date:", "end_date"));
-					logger.trace(String.format("%-18s  %-18s %18s %31s", proj.getTimeframe().getStartDate(),
-							proj.getLocation(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
+					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getTimeframe().getStartDate(),
+							proj.getLocation(), proj.getDescription(),proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
 
 				}
 			}
@@ -344,9 +344,9 @@ public class App {
 				List<Project> projs = query.getResultList();
 
 				for (Project proj : projs) {
-					logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:",
-							"start_date:", "end_date"));
-					logger.trace(String.format("%-18s  %-18s %18s %31s", proj.getTimeframe().getStartDate(),
+					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", "Project_ID:", "Project_location:","Project_Descrpition:"
+							,"start_date:", "end_date"));
+					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getTimeframe().getStartDate(),
 							proj.getLocation(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
 
 				}
@@ -387,7 +387,7 @@ public class App {
 			for (Project proj: projects) {				
 					logger.trace(String.format("%-18s%-31s%-31s%-31s", "Project_ID:", "Project_location:",
 							"start_date:", "end_date"));
-					logger.trace(String.format("%-18s  %-18s %18s %31s", proj.getTimeframe().getStartDate(),
+					logger.trace(String.format("%-18s%-31s%-31s%-31s%-31s", proj.getTimeframe().getStartDate(),
 							proj.getLocation(), proj.getTimeframe().getStartDate(), proj.getTimeframe().getEndDates()));
 					}
 			

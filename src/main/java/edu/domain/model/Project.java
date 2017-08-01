@@ -23,6 +23,16 @@ public class Project {
 	@Column(name = "Loaction")
 	private String location;
 	
+	@Column(name = "Descrption")
+	private String description;	
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	@Embedded
 	TimeFrame timeframe;
 	
@@ -47,10 +57,12 @@ public class Project {
 		super();
 	}
 
-	public Project(String location, TimeFrame timeframe) {
+	public Project(String location, TimeFrame timeframe, String description) {
 		super();		
 		this.location = location;
-		this.timeframe = timeframe;			
+		this.timeframe = timeframe;		
+		this.description = description;
+		
 	}
 	
 	public TimeFrame getTimeframe() {

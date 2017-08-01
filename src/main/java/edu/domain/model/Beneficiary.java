@@ -10,14 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Beneficiary")
-public class Beneficiary {
-     public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+public class Beneficiary {     
 
 	@Id
      @GeneratedValue
@@ -26,7 +19,15 @@ public class Beneficiary {
      @Column(name = "name")
      private String name;
      
-     @ManyToOne(cascade = CascadeType.PERSIST)
+     public int getBeneficiaryId() {
+		return beneficiaryId;
+	}
+
+	public void setBeneficiaryId(int beneficiaryId) {
+		this.beneficiaryId = beneficiaryId;
+	}
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
  	 private Project project;	
 
 	public Project getProject() {
@@ -35,5 +36,12 @@ public class Beneficiary {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

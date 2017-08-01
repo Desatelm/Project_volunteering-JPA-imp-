@@ -1,0 +1,5 @@
+edu\domain\project\TimeFrame.class
+edu\domain\control\App.class
+edu\domain\project\Resource.class
+edu\domain\project\Project.class
+edu\domain\project\Task.class
